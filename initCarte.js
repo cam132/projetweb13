@@ -63,15 +63,18 @@ function isPop(textecherche)
 }
 
 function villeToMarqueur(ville) {
-	var longitude = ville.longitude;
-	var latitude = ville.latitude;
-	//console.log("listToMarqueurs : " + commune + " long : " + longitude + " lat : " + latitude);
-	var coord = getCoordonnee(longitude,latitude);
-	var tmpMarqueur = new OpenLayers.Marker(coord);
-	//console.log(coord);
-    tmpMarqueur.onClu
-	calqueMarqueurs.addMarker(tmpMarqueur);
-
+    var longitude = ville.longitude;
+    var latitude = ville.latitude;
+    //console.log("listToMarqueurs : " + commune + " long : " + longitude + " lat : " + latitude);
+    var coord = getCoordonnee(longitude,latitude);
+    var tmpMarqueur = new OpenLayers.Marker(coord);
+    //console.log(coord);
+    //Rend le marqueur cliquable, affiche la popup correspondant a la ville
+    tmpMarqueur.events.register('mousedown',tmpMarqueur,function(e){
+	villeToPopUp(ville);
+	OpenLayers.Event.stop(e)
+    });
+    calqueMarqueurs.addMarker(tmpMarqueur);
 }
 
 /* Dessine sur la carte les marqueurs correspondant aux villes contenu dans un tableau[commune] passé en paramètre
