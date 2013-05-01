@@ -6,6 +6,7 @@
     <script type="text/javascript" src="ajax_getPop.js"></script>
     <script type="text/javascript" src="ajax_getSuggest.js"></script>
     <script type="text/javascript" src="ajax_isVilleValide.js"></script>
+    <script type="text/javascript" src="ajax_getDepartement.js"></script>
     <link rel="stylesheet" type="text/css" href="home.css"/>
     <title> Regardeur de carte TW </title>
 

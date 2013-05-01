@@ -3,25 +3,25 @@ var calqueMarqueurs = null;
 var oldtextecherche;
 
 /* Initialise tout
-*/
+ */
 function initAll() {
     drawmap();
-//    listeville = getListeVille();
+    //    listeville = getListeVille();
 }
 
 /** Dessine la carte de base
-*/
+ */
 function drawmap () {
     map = new OpenLayers.Map('macarte');
     //Ajoutons le controle au clavier
     map.addControl(new OpenLayers.Control.KeyboardDefaults());
     map.addLayer(new OpenLayers.Layer.OSM());
-//Allons au centre de la France =]
-gotoFrance();
+    //Allons au centre de la France =]
+    gotoFrance();
 }
 
 /* Transforme deux nombres en une coordonnée openLayer
-*/
+ */
 function getCoordonnee(longitude,latitude) {
     var projCarte = map.getProjectionObject();
     var projSpherique = new OpenLayers.Projection("EPSG:4326");
@@ -33,11 +33,11 @@ function getCoordonnee(longitude,latitude) {
 
 function gotoFrance()
 {
-gotocoordonee(1.875278,46.60611);
+    gotocoordonee(1.875278,46.60611);
     map.zoomTo(5);
 }
 /* Centre la vue sur les coordonnées passées en paramètres
-*/
+ */
 function gotocoordonee(longitude,latitude) {
     //    alert(longitude + " " + latitude);
     var coord = getCoordonnee(longitude,latitude)
@@ -46,7 +46,7 @@ function gotocoordonee(longitude,latitude) {
 }
 
 /* Centre la vue et zoom sur une ville passé en paramètre
-*/
+ */
 function goToVille(ville) {
     if(ville)
     {
@@ -78,7 +78,7 @@ function villeToMarqueur(ville) {
 }
 
 /* Dessine sur la carte les marqueurs correspondant aux villes contenu dans un tableau[commune] passé en paramètre
-*/
+ */
 function listToMarqueurs(liste) {
     if (calqueMarqueurs)
     {
@@ -94,14 +94,14 @@ function listToMarqueurs(liste) {
 }
 
 /* Dessine une popup contenant le nom de la ville et sa population sur une ville passée en paramètre
-*/
+ */
 function villeToPopUp(ville) {
     console.log("Poping up : " + ville.commune);
     var popup = new OpenLayers.Popup(ville.commune,
-				 getCoordonnee(ville.longitude,ville.latitude),
-				 new OpenLayers.Size(200,50),
-				 ville.codeinsee + " " + ville.commune + " <br> Population = " + ville.population + "habs" ,
-				 true);
+				     getCoordonnee(ville.longitude,ville.latitude),
+				     new OpenLayers.Size(200,50),
+				     ville.codeinsee + " " + ville.commune + " <br> Population = " + ville.population + "habs" ,
+				     true);
     popup.setOpacity(0.75);
     popup.setBorder("5px");
     map.addPopup(popup);
@@ -117,12 +117,12 @@ function listToString(liste) {
 }
 
 /* Fonction appelé quand l'utilisateur presse une touche dans la barre de recherche :
-* On vérifie que le contenu de la barre est changé,
-* On affiche sur la carte des marqueurs suggérant la ville recherché
-* si l'utilisateur demande une population, on affiche sur la carte des marqueurs sur les villes validant la population demandée
-* (qui peut etre inférieure ou supérieure à un nombre)
-* si l'utilisateur demande une ville connu, on s'y déplace et on affiche une popup contenant des informations supplémentaires
-*/
+ * On vérifie que le contenu de la barre est changé,
+ * On affiche sur la carte des marqueurs suggérant la ville recherché
+ * si l'utilisateur demande une population, on affiche sur la carte des marqueurs sur les villes validant la population demandée
+ * (qui peut etre inférieure ou supérieure à un nombre)
+ * si l'utilisateur demande une ville connu, on s'y déplace et on affiche une popup contenant des informations supplémentaires
+ */
 function searchAndGoToPlaces(textecherche) {
     //On vérifie que le texte est changé; en effet, l'évenement onmouseup (voir dans home.php) continue d'etre rappelé meme si l'utilisateur
     //n'appuie pas sur une touche supplémentaire
@@ -132,9 +132,14 @@ function searchAndGoToPlaces(textecherche) {
 	//On place les suggestions
 	listToMarqueurs(getSuggest(textecherche));
 	if (textecherche == "France")
-{
-gotoFrance();
-}
+	{
+	    gotoFrance();
+	}
+	else if (textecherche.length==2 && isFinite(parseInt(textecherche)))
+	{//L'utilisateur fait une recherche par département
+	    console.log("searchAndGoToPlaces : looking for dept #" + textecherche);
+	    listToMarqueurs(getDepartement(textecherche));
+	}
 	else if (isPop(textecherche))
 	{//L'utilisateur demande une population
             var op;
